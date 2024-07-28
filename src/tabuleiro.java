@@ -7,11 +7,12 @@ import java.util.List;
 
 public class tabuleiro {
     private static final int TOTAL_CASAS = 40;
+    private static final int[] CASAS_SORTE = {5, 15, 30}; // Casas da sorte
     private JFrame frame;
     private painelTabuleiro painelTabuleiro;
     private JButton lancarDadosButton;
     private JLabel infoLabel;
-    private JLabel dadosLabel; // Novo JLabel para mostrar o valor dos dados
+    private JLabel dadosLabel;
     private List<jogador> jogadores = new ArrayList<>();
     private int turno = 0;
     private dados dados = new dados();
@@ -26,12 +27,8 @@ public class tabuleiro {
         frame.setSize(800, 600);
         frame.setLayout(new BorderLayout());
 
-        inicializarJogadores();
-
-        if (jogadores.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Nenhum jogador foi inicializado.");
-            System.exit(1); // Encerra o programa se não houver jogadores
-        }
+        int numJogadores = obterNumeroJogadores();
+        inicializarJogadores(numJogadores);
 
         painelTabuleiro = new painelTabuleiro(jogadores);
         frame.add(painelTabuleiro, BorderLayout.CENTER);
@@ -54,13 +51,31 @@ public class tabuleiro {
         frame.setVisible(true);
     }
 
-    private void inicializarJogadores() {
-        jogadores.add(new jogadorSortudo("Jogador 1", Color.RED));
-        jogadores.add(new jogadorAzarado("Jogador 2", Color.BLUE));
-        jogadores.add(new jogadorSortudo("Jogador 3", Color.GREEN));
-        jogadores.add(new jogadorAzarado("Jogador 4", Color.YELLOW));
-        jogadores.add(new jogadorSortudo("Jogador 5", Color.ORANGE));
-        jogadores.add(new jogadorAzarado("Jogador 6", Color.MAGENTA));
+    private int obterNumeroJogadores() {
+        int numJogadores = 0;
+        while (numJogadores < 2 || numJogadores > 6) {
+            String input = JOptionPane.showInputDialog(frame, "Informe o número de jogadores (2 a 6):");
+            try {
+                numJogadores = Integer.parseInt(input);
+                if (numJogadores < 2 || numJogadores > 6) {
+                    JOptionPane.showMessageDialog(frame, "Número de jogadores deve ser entre 2 e 6.");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(frame, "Entrada inválida. Por favor, insira um número.");
+            }
+        }
+        return numJogadores;
+    }
+
+    private void inicializarJogadores(int numJogadores) {
+        jogadores.clear();
+        for (int i = 1; i <= numJogadores; i++) {
+            if (i % 2 == 0) {
+                jogadores.add(new jogadorAzarado("Jogador " + i, Color.getHSBColor(i / (float) numJogadores, 1.0f, 1.0f)));
+            } else {
+                jogadores.add(new jogadorSortudo("Jogador " + i, Color.getHSBColor(i / (float) numJogadores, 1.0f, 1.0f)));
+            }
+        }
     }
 
     private class LancarDadosListener implements ActionListener {
@@ -97,6 +112,8 @@ public class tabuleiro {
             jogadorAtual.mover(somaDados, tabuleiro.this);
             infoLabel.setText("Jogador atual: " + jogadorAtual.getNome() + " (Posição: " + jogadorAtual.getPosicao() + ")");
 
+            verificarCasaDaSorte(jogadorAtual);
+
             if (dado1 == dado2) {
                 JOptionPane.showMessageDialog(frame, "Você tirou um duplo! Jogue novamente.");
             } else {
@@ -105,6 +122,20 @@ public class tabuleiro {
 
             painelTabuleiro.repaint();
             verificarVencedor();
+        }
+    }
+
+    private void verificarCasaDaSorte(jogador jogadorAtual) {
+        for (int casa : CASAS_SORTE) {
+            if (jogadorAtual.getPosicao() == casa) {
+                if (!(jogadorAtual instanceof jogadorAzarado)) {
+                    jogadorAtual.setPosicao(jogadorAtual.getPosicao() + 3);
+                    JOptionPane.showMessageDialog(frame, jogadorAtual.getNome() + " caiu na casa da sorte e avançou 3 casas!");
+                } else {
+                    JOptionPane.showMessageDialog(frame, jogadorAtual.getNome() + " caiu na casa da sorte, mas como é um jogador azarado, não avançou.");
+                }
+                break;
+            }
         }
     }
 
@@ -151,13 +182,11 @@ public class tabuleiro {
             return;
         }
 
-        // Cria uma lista de nomes dos jogadores para mostrar na caixa de diálogo
         List<String> nomesJogadores = new ArrayList<>();
         for (jogador jogador : jogadores) {
             nomesJogadores.add(jogador.getNome());
         }
 
-        // Exibe a caixa de diálogo com a lista de jogadores
         String jogadorSelecionadoNome = (String) JOptionPane.showInputDialog(
                 frame,
                 "Escolha um jogador para retroceder ao início:",
@@ -169,7 +198,6 @@ public class tabuleiro {
         );
 
         if (jogadorSelecionadoNome != null) {
-            // Encontra o jogador selecionado na lista de jogadores
             for (jogador jogador : jogadores) {
                 if (jogador.getNome().equals(jogadorSelecionadoNome)) {
                     jogador.setPosicao(0);
