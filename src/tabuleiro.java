@@ -107,8 +107,8 @@ public class tabuleiro {
             int dado2 = dadosLançados[1];
             int somaDados = dado1 + dado2;
 
-            dadosLabel.setText("Valores dos dados: " + dado1 + " e " + dado2);
-
+            dadosLabel.setText("Valores dos dados: " + dado1 + " e " + dado2 + ". Valor total dos dados: " + somaDados);
+            
             jogadorAtual.mover(somaDados, tabuleiro.this);
             infoLabel.setText("Jogador atual: " + jogadorAtual.getNome() + " (Posição: " + jogadorAtual.getPosicao() + ")");
 
