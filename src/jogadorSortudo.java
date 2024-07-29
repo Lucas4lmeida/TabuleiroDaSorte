@@ -2,14 +2,14 @@
 import java.awt.Color;
 import javax.swing.JOptionPane;
 
-public class jogadorSortudo extends jogador {
+public class JogadorSortudo extends Jogador {
 
-    public jogadorSortudo(String nome, Color cor) {
+    public JogadorSortudo(String nome, Color cor) {
         super(nome, cor);
     }
 
     @Override
-    public void mover(int casas, tabuleiro jogo) {
+    public void mover(int casas, Tabuleiro jogo) {
         if (!podeJogar) return;
 
         int novaPosicao = this.posicao + casas;
@@ -22,12 +22,12 @@ public class jogadorSortudo extends jogador {
         this.incrementarJogadas();
     }
 
-    private void verificarCasaEspecial(tabuleiro jogo) {
+    private void verificarCasaEspecial(Tabuleiro jogo) {
         if (posicao == 13) {
-            cartaAleatoria carta = cartaAleatoria.sortearCarta();
+            CartaAleatoria carta = CartaAleatoria.sortearCarta();
             JOptionPane.showMessageDialog(jogo.getFrame(), "Você tirou a carta: " + carta);
-            if (carta.getTipo() == cartaAleatoria.Tipo.CARTA_AZARADO) {
-                jogo.alterarTipoJogador(this, new jogadorAzarado(this.nome, this.cor));
+            if (carta.getTipo() == CartaAleatoria.Tipo.CARTA_AZARADO) {
+                jogo.alterarTipoJogador(this, new JogadorAzarado(this.nome, this.cor));
             }
         } else if (posicao == 5 || posicao == 15 || posicao == 30) {
            // if (this instanceof jogadorAzarado) {

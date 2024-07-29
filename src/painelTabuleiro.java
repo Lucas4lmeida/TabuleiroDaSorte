@@ -2,10 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class painelTabuleiro extends JPanel {
-    private List<jogador> jogadores;
+public class PainelTabuleiro extends JPanel {
+    private List<Jogador> jogadores;
 
-    public painelTabuleiro(List<jogador> jogadores) {
+    public PainelTabuleiro(List<Jogador> jogadores) {
         this.jogadores = jogadores;
         setPreferredSize(new Dimension(800, 600)); // Define o tamanho preferido do painel
     }
@@ -33,7 +33,7 @@ public class painelTabuleiro extends JPanel {
     }
 
     private void desenharJogadores(Graphics g) {
-        for (jogador jogador : jogadores) {
+        for (Jogador jogador : jogadores) {
             // Desenha a posição do jogador
             g.setColor(jogador.getCor());
             int x = 50 + (jogador.getPosicao() % 10) * 70;

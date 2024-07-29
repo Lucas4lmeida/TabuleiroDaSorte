@@ -5,23 +5,23 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class tabuleiro {
+public class Tabuleiro {
     private static final int TOTAL_CASAS = 40;
     private static final int[] CASAS_SORTE = {5, 15, 30}; // Casas da sorte
     private JFrame frame;
-    private painelTabuleiro painelTabuleiro;
+    private PainelTabuleiro painelTabuleiro;
     private JButton lancarDadosButton;
     private JLabel infoLabel;
     private JLabel dadosLabel;
-    private List<jogador> jogadores = new ArrayList<>();
+    private List<Jogador> jogadores = new ArrayList<>();
     private int turno = 0;
-    private dados dados = new dados();
+    private Dados dados = new Dados();
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(tabuleiro::new);
+        SwingUtilities.invokeLater(Tabuleiro::new);
     }
 
-    public tabuleiro() {
+    public Tabuleiro() {
         frame = new JFrame("Tabuleiro");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
@@ -30,7 +30,7 @@ public class tabuleiro {
         int numJogadores = obterNumeroJogadores();
         inicializarJogadores(numJogadores);
 
-        painelTabuleiro = new painelTabuleiro(jogadores);
+        painelTabuleiro = new PainelTabuleiro(jogadores);
         frame.add(painelTabuleiro, BorderLayout.CENTER);
 
         JPanel controlePanel = new JPanel();
@@ -71,9 +71,9 @@ public class tabuleiro {
         jogadores.clear();
         for (int i = 1; i <= numJogadores; i++) {
             if (i % 2 == 0) {
-                jogadores.add(new jogadorAzarado("Jogador " + i, Color.getHSBColor(i / (float) numJogadores, 1.0f, 1.0f)));
+                jogadores.add(new JogadorAzarado("Jogador " + i, Color.getHSBColor(i / (float) numJogadores, 1.0f, 1.0f)));
             } else {
-                jogadores.add(new jogadorSortudo("Jogador " + i, Color.getHSBColor(i / (float) numJogadores, 1.0f, 1.0f)));
+                jogadores.add(new JogadorSortudo("Jogador " + i, Color.getHSBColor(i / (float) numJogadores, 1.0f, 1.0f)));
             }
         }
     }
@@ -86,7 +86,7 @@ public class tabuleiro {
                 return;
             }
 
-            jogador jogadorAtual = jogadores.get(turno);
+            Jogador jogadorAtual = jogadores.get(turno);
             if (jogadorAtual == null) {
                 JOptionPane.showMessageDialog(frame, "Jogador atual é null.");
                 return;
@@ -109,7 +109,7 @@ public class tabuleiro {
 
             dadosLabel.setText("Valores dos dados: " + dado1 + " e " + dado2 + ". Valor total dos dados: " + somaDados);
             
-            jogadorAtual.mover(somaDados, tabuleiro.this);
+            jogadorAtual.mover(somaDados, Tabuleiro.this);
             infoLabel.setText("Jogador atual: " + jogadorAtual.getNome() + " (Posição: " + jogadorAtual.getPosicao() + ")");
 
             verificarCasaDaSorte(jogadorAtual);
@@ -125,10 +125,10 @@ public class tabuleiro {
         }
     }
 
-    private void verificarCasaDaSorte(jogador jogadorAtual) {
+    private void verificarCasaDaSorte(Jogador jogadorAtual) {
         for (int casa : CASAS_SORTE) {
             if (jogadorAtual.getPosicao() == casa) {
-                if (!(jogadorAtual instanceof jogadorAzarado)) {
+                if (!(jogadorAtual instanceof JogadorAzarado)) {
                     jogadorAtual.setPosicao(jogadorAtual.getPosicao() + 3);
                     JOptionPane.showMessageDialog(frame, jogadorAtual.getNome() + " caiu na casa da sorte e avançou 3 casas!");
                 } else {
@@ -144,7 +144,7 @@ public class tabuleiro {
 
         turno = (turno + 1) % jogadores.size();
         if (turno < jogadores.size()) {
-            jogador proximoJogador = jogadores.get(turno);
+            Jogador proximoJogador = jogadores.get(turno);
             infoLabel.setText("É a vez do " + proximoJogador.getNome());
         }
     }
@@ -152,7 +152,7 @@ public class tabuleiro {
     private void verificarVencedor() {
         if (jogadores.isEmpty()) return;
 
-        for (jogador jogador : jogadores) {
+        for (Jogador jogador : jogadores) {
             if (jogador != null && jogador.getPosicao() >= TOTAL_CASAS - 1) {
                 JOptionPane.showMessageDialog(frame, "Parabéns, " + jogador.getNome() + "! Você ganhou!");
                 System.exit(0);
@@ -160,7 +160,7 @@ public class tabuleiro {
         }
     }
 
-    public void alterarTipoJogador(jogador jogadorAntigo, jogador novoTipo) {
+    public void alterarTipoJogador(Jogador jogadorAntigo, Jogador novoTipo) {
         if (jogadorAntigo == null || novoTipo == null) {
             JOptionPane.showMessageDialog(frame, "Jogador inválido.");
             return;
@@ -183,7 +183,7 @@ public class tabuleiro {
         }
 
         List<String> nomesJogadores = new ArrayList<>();
-        for (jogador jogador : jogadores) {
+        for (Jogador jogador : jogadores) {
             nomesJogadores.add(jogador.getNome());
         }
 
@@ -198,7 +198,7 @@ public class tabuleiro {
         );
 
         if (jogadorSelecionadoNome != null) {
-            for (jogador jogador : jogadores) {
+            for (Jogador jogador : jogadores) {
                 if (jogador.getNome().equals(jogadorSelecionadoNome)) {
                     jogador.setPosicao(0);
                     break;
@@ -207,10 +207,10 @@ public class tabuleiro {
         }
     }
 
-    public void trocarPosicaoJogadores(jogador jogadorAtual) {
+    public void trocarPosicaoJogadores(Jogador jogadorAtual) {
         if (jogadorAtual == null || jogadores.isEmpty()) return;
 
-        jogador jogadorMaisAtras = jogadores.stream()
+        Jogador jogadorMaisAtras = jogadores.stream()
                 .filter(j -> j != jogadorAtual)
                 .min((j1, j2) -> Integer.compare(j1.getPosicao(), j2.getPosicao()))
                 .orElse(null);

@@ -2,14 +2,14 @@
 import java.awt.Color;
 import javax.swing.JOptionPane;
 
-public class jogadorAzarado extends jogador {
+public class JogadorAzarado extends Jogador {
 
-    public jogadorAzarado(String nome, Color cor) {
+    public JogadorAzarado(String nome, Color cor) {
         super(nome, cor);
     }
 
     @Override
-    public void mover(int casas, tabuleiro jogo) {
+    public void mover(int casas, Tabuleiro jogo) {
         if (!podeJogar) return;
 
         int novaPosicao = this.posicao + casas;
@@ -22,7 +22,7 @@ public class jogadorAzarado extends jogador {
         this.incrementarJogadas();
     }
 
-    private void verificarCasaEspecial(tabuleiro jogo) {
+    private void verificarCasaEspecial(Tabuleiro jogo) {
         if (posicao == 10 || posicao == 25 || posicao == 38) {
             JOptionPane.showMessageDialog(jogo.getFrame(), "Você não joga a próxima rodada.");
             jogo.pularVez();

@@ -1,10 +1,10 @@
 import java.util.Random;
 
-public class cartaAleatoria {
+public class CartaAleatoria {
     public enum Tipo { CARTA_AZARADO, CARTA_AFORTUNADO }
     private Tipo tipo;
 
-    private cartaAleatoria(Tipo tipo) {
+    private CartaAleatoria(Tipo tipo) {
         this.tipo = tipo;
     }
 
@@ -12,9 +12,9 @@ public class cartaAleatoria {
         return tipo;
     }
 
-    public static cartaAleatoria sortearCarta() {
+    public static CartaAleatoria sortearCarta() {
         Random rand = new Random();
-        return new cartaAleatoria(rand.nextBoolean() ? Tipo.CARTA_AZARADO : Tipo.CARTA_AFORTUNADO);
+        return new CartaAleatoria(rand.nextBoolean() ? Tipo.CARTA_AZARADO : Tipo.CARTA_AFORTUNADO);
     }
 
     @Override

@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class dados {
+public class Dados {
     private Random random = new Random();
 
     public int[] lancarDados() {

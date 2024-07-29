@@ -1,14 +1,14 @@
 
 import java.awt.Color;
 
-public abstract class jogador {
+public abstract class Jogador {
     protected String nome;
     protected Color cor;
     protected int posicao;
     protected int jogadas;
     protected boolean podeJogar;
 
-    public jogador(String nome, Color cor) {
+    public Jogador(String nome, Color cor) {
         this.nome = nome;
         this.cor = cor;
         this.posicao = 0;
@@ -16,7 +16,7 @@ public abstract class jogador {
         this.podeJogar = true;
     }
 
-    public abstract void mover(int casas, tabuleiro jogo);
+    public abstract void mover(int casas, Tabuleiro jogo);
 
     public String getNome() {
         return nome;
