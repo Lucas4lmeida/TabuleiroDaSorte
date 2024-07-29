@@ -1,5 +1,8 @@
-import javax.swing.*;
+package views;
+
+import models.Jogador;
 import java.awt.*;
+import javax.swing.*;
 import java.util.List;
 
 public class PainelTabuleiro extends JPanel {
@@ -7,7 +10,7 @@ public class PainelTabuleiro extends JPanel {
 
     public PainelTabuleiro(List<Jogador> jogadores) {
         this.jogadores = jogadores;
-        setPreferredSize(new Dimension(800, 600)); // Define o tamanho preferido do painel
+        setPreferredSize(new Dimension(800, 600));
     }
 
     @Override
@@ -18,11 +21,9 @@ public class PainelTabuleiro extends JPanel {
     }
 
     private void desenharTabuleiro(Graphics g) {
-        // Desenha o retângulo que representa o tabuleiro
         g.setColor(Color.BLACK);
         g.drawRect(50, 50, 700, 500);
 
-        // Opcional: desenha a marcação das casas
         g.setColor(Color.GRAY);
         for (int i = 0; i < 40; i++) {
             int x = 50 + (i % 10) * 70;
@@ -34,7 +35,6 @@ public class PainelTabuleiro extends JPanel {
 
     private void desenharJogadores(Graphics g) {
         for (Jogador jogador : jogadores) {
-            // Desenha a posição do jogador
             g.setColor(jogador.getCor());
             int x = 50 + (jogador.getPosicao() % 10) * 70;
             int y = 50 + (jogador.getPosicao() / 10) * 50;

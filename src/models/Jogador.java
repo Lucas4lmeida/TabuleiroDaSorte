@@ -1,3 +1,4 @@
+package models;
 
 import java.awt.Color;
 
@@ -16,7 +17,7 @@ public abstract class Jogador {
         this.podeJogar = true;
     }
 
-    public abstract void mover(int casas, Tabuleiro jogo);
+    public abstract void mover(int casas);
 
     public String getNome() {
         return nome;
