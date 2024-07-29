@@ -1,20 +1,23 @@
 package models;
 
 import java.awt.Color;
+import views.PainelTabuleiro;
 
 public abstract class Jogador {
     protected String nome;
     protected Color cor;
-    protected int posicao;
-    protected int jogadas;
-    protected boolean podeJogar;
+    protected int posicao = 0;
+    protected boolean podeJogar = true;
+    // Adicionando referência ao painel
+    protected PainelTabuleiro painelTabuleiro; 
 
     public Jogador(String nome, Color cor) {
         this.nome = nome;
         this.cor = cor;
-        this.posicao = 0;
-        this.jogadas = 0;
-        this.podeJogar = true;
+    }
+
+    public void setPainelTabuleiro(PainelTabuleiro painelTabuleiro) {
+        this.painelTabuleiro = painelTabuleiro;
     }
 
     public abstract void mover(int casas);
@@ -33,14 +36,6 @@ public abstract class Jogador {
 
     public void setPosicao(int posicao) {
         this.posicao = posicao;
-    }
-
-    public void incrementarJogadas() {
-        jogadas++;
-    }
-
-    public int getJogadas() {
-        return jogadas;
     }
 
     public boolean podeJogar() {

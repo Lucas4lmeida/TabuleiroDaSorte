@@ -1,6 +1,8 @@
 package controllers;
 
 import models.Jogador;
+import models.JogadorAzarado;
+import models.JogadorSortudo;
 import models.Dados;
 import views.PainelTabuleiro;
 
@@ -25,19 +27,20 @@ public class TabuleiroController {
         this.painelTabuleiro = painelTabuleiro;
         this.dados = dados;
         this.jogadores = jogadores;
-        createAndShowGUI();
+        criarInterface();
     }
 
-    private void createAndShowGUI() {
+    private void criarInterface() {
         frame = new JFrame("Tabuleiro do Jogo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
+        
         frame.setLayout(new BorderLayout());
 
         // Adiciona o painel do tabuleiro
         frame.add(painelTabuleiro, BorderLayout.CENTER);
 
-        // Cria o painel de controle
+        //Layout
         JPanel controlePanel = new JPanel();
         controlePanel.setLayout(new FlowLayout());
 
@@ -100,7 +103,7 @@ public class TabuleiroController {
             } else {
                 proximoTurno();
             }
-
+            //atualiza a visualização do tabuleiro depois de uma ação, como um jogador mover-se para uma nova posição, por exemplo.
             painelTabuleiro.repaint();
             verificarVencedor();
         }
@@ -113,10 +116,24 @@ public class TabuleiroController {
 
     private void verificarVencedor() {
         for (Jogador jogador : jogadores) {
-            if (jogador.getPosicao() >= 39) {
+            if (jogador.getPosicao() >= 40) {
                 JOptionPane.showMessageDialog(frame, "Parabéns, " + jogador.getNome() + "! Você ganhou!");
                 System.exit(0);
             }
         }
+    }
+
+    public void alterarTipoJogador(Jogador jogador, Jogador novoTipo) {
+        // Encontrar o índice do jogador na lista
+        int index = jogadores.indexOf(jogador);
+        if (index >= 0) {
+            // Atualizar o jogador na lista
+            jogadores.set(index, novoTipo);
+            painelTabuleiro.repaint();
+        }
+    }
+
+    public List<Jogador> getJogadores() {
+        return jogadores;
     }
 }
