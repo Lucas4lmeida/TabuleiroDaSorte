@@ -8,7 +8,7 @@ public abstract class Jogador {
     protected Color cor;
     protected int posicao = 0;
     protected boolean podeJogar = true;
-    // Adicionando referência ao painel
+    
     protected PainelTabuleiro painelTabuleiro; 
 
     public Jogador(String nome, Color cor) {

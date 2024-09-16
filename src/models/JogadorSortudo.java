@@ -17,9 +17,8 @@ public class JogadorSortudo extends Jogador {
     public void mover(int casas) {
         if (!podeJogar) return;
 
-        // Verifica a soma dos dados e ajusta a posição
         if (casas < 7) {
-            casas = 7; // Garante que a soma dos dados seja sempre >= 7
+            casas = 7; 
         }
 
         int novaPosicao = this.posicao + casas;
@@ -59,7 +58,7 @@ public class JogadorSortudo extends Jogador {
         int index = jogadores.indexOf(this);
         if (index != -1) {
             jogadores.set(index, novoJogadorAzarado);
-            // Atualizar o painelTabuleiro, se necessário
+            
             if (painelTabuleiro != null) {
                 painelTabuleiro.substituirJogador(this, novoJogadorAzarado);
                 painelTabuleiro.revalidate();

@@ -4,11 +4,11 @@ import java.awt.Color;
 import javax.swing.JOptionPane;
 import java.util.List;
 
-public class JogadorAzarado extends Jogador {
+public class JogadorNormal extends Jogador {
     
     private List<Jogador> jogadores;
 
-    public JogadorAzarado(String nome, Color cor) {
+    public JogadorNormal(String nome, Color cor) {
         super(nome, cor);
     }
 
@@ -16,10 +16,6 @@ public class JogadorAzarado extends Jogador {
     public void mover(int casas) {
         if (!podeJogar) return;
 
-        
-        if (casas > 6) {
-            casas = 6;
-        }
 
         int novaPosicao = this.posicao + casas;
         if (novaPosicao >= 41) {
@@ -48,7 +44,7 @@ public class JogadorAzarado extends Jogador {
                 }
             }
         } else if (posicao == 5 || posicao == 15 || posicao == 30) {
-            JOptionPane.showMessageDialog(null, "Você é um Jogador Azarado e não pode avançar nas casas da sorte.");
+            JOptionPane.showMessageDialog(null, "Você é um Jogador Normal e não pode avançar nas casas da sorte.");
         } else if (posicao == 17 || posicao == 27) {
             escolherJogadorParaRetornarAoInicio();
         }

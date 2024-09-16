@@ -1,8 +1,6 @@
 package controllers;
 
 import models.Jogador;
-import models.JogadorAzarado;
-import models.JogadorSortudo;
 import models.Dados;
 import views.PainelTabuleiro;
 
@@ -37,30 +35,26 @@ public class TabuleiroController {
         
         frame.setLayout(new BorderLayout());
 
-        // Adiciona o painel do tabuleiro
         frame.add(painelTabuleiro, BorderLayout.CENTER);
 
-        //Layout
+        
         JPanel controlePanel = new JPanel();
         controlePanel.setLayout(new FlowLayout());
 
-        // Cria o botão para lançar dados
+        
         lancarDadosButton = new JButton("Lançar Dados");
         lancarDadosButton.addActionListener(new LancarDadosListener());
         controlePanel.add(lancarDadosButton);
 
-        // Cria a label para mostrar valores dos dados
         dadosLabel = new JLabel("Valores dos dados: ");
         controlePanel.add(dadosLabel);
 
-        // Cria a label para mostrar informações do jogador atual
+        
         infoLabel = new JLabel("É a vez do " + jogadores.get(turno).getNome(), JLabel.CENTER);
         frame.add(infoLabel, BorderLayout.NORTH);
 
-        // Adiciona o painel de controle à parte inferior da janela
         frame.add(controlePanel, BorderLayout.SOUTH);
 
-        // Exibe a janela
         frame.setVisible(true);
     }
 
@@ -103,7 +97,7 @@ public class TabuleiroController {
             } else {
                 proximoTurno();
             }
-            //atualiza a visualização do tabuleiro depois de uma ação, como um jogador mover-se para uma nova posição, por exemplo.
+            
             painelTabuleiro.repaint();
             verificarVencedor();
         }
@@ -124,10 +118,10 @@ public class TabuleiroController {
     }
 
     public void alterarTipoJogador(Jogador jogador, Jogador novoTipo) {
-        // Encontrar o índice do jogador na lista
+       
         int index = jogadores.indexOf(jogador);
         if (index >= 0) {
-            // Atualizar o jogador na lista
+            
             jogadores.set(index, novoTipo);
             painelTabuleiro.repaint();
         }

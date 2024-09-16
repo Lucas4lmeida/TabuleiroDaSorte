@@ -17,20 +17,15 @@ import java.util.Set;
 public class Main {
 
     public static void main(String[] args) {
-        // Solicita o número de jogadores
         int numJogadores = obterNumeroJogadores();
 
-        // Criação dos dados
         Dados dados = new Dados();
 
-        // Criação da visão do tabuleiro
         List<Jogador> jogadores = criarJogadores(numJogadores);
         PainelTabuleiro painelTabuleiro = new PainelTabuleiro(jogadores);
 
-        // Atualiza jogadores com o painelTabuleiro se necessário
         atualizarJogadoresComPainel(jogadores, painelTabuleiro);
 
-        // Criação do controlador
         new TabuleiroController(painelTabuleiro, dados, jogadores);
     }
 
@@ -65,7 +60,7 @@ public class Main {
             if (i % 2 == 0) {
                 jogador = new JogadorAzarado(nome, cor);
             } else {
-                jogador = new JogadorSortudo(nome, cor, jogadores); // Passando a lista de jogadores
+                jogador = new JogadorSortudo(nome, cor, jogadores);
             }
             jogadores.add(jogador);
         }
