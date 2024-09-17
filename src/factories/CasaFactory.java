@@ -4,25 +4,23 @@ import models.*;
 
 public class CasaFactory {
     public static Casa criarCasaEspecifica(String tipo, int numero) {
-        switch (tipo.toLowerCase()) {
-            case "simples":
-                return new CasaSimples(numero);
-            case "surpresa":
+        switch (tipo) {
+            case "Surpresa":
                 return new CasaSurpresa(numero);
-            case "prisão":
+            case "Prisão":
                 return new CasaPrisao(numero);
-            case "sorte":
+            case "Sorte":
                 return new CasaSorte(numero);
-            case "azar":
+            case "Azar":
                 return new CasaAzar(numero);
-            case "reversa":
+            case "Reversa":
                 return new CasaReversa(numero);
-            case "joga de novo":
+            case "Joga de Novo":
                 return new CasaJogaDeNovo(numero);
-            case "troca":
+            case "Troca":
                 return new CasaTroca(numero);
             default:
-                throw new IllegalArgumentException("Tipo de casa inválido: " + tipo);
+                return new CasaSimples(numero);
         }
     }
 }

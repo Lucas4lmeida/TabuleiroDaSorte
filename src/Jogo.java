@@ -4,6 +4,7 @@ import views.TabuleiroView;
 import controllers.TabuleiroController;
 import javax.swing.JOptionPane;
 import java.awt.Color;
+import java.util.*;
 
 public class Jogo {
     private Tabuleiro tabuleiro;
@@ -16,26 +17,6 @@ public class Jogo {
         this.tabuleiro = Tabuleiro.getInstance();
         this.view = new TabuleiroView();
         this.controller = new TabuleiroController(tabuleiro, view);
-    }
-
-    public void configTabuleiro(int numCasas) {
-        String[] opcoesCasas = {"Simples", "Surpresa", "Prisão", "Sorte", "Azar", "Reversa", "Joga de Novo", "Troca"};
-
-        for (int i = 0; i < numCasas; i++) {
-            int escolha = JOptionPane.showOptionDialog(null,
-                    "Escolha o tipo da casa " + i + ":",
-                    "Configuração do Tabuleiro",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    opcoesCasas,
-                    opcoesCasas[0]);
-
-            Casa casa = CasaFactory.criarCasaEspecifica(opcoesCasas[escolha], i);
-            tabuleiro.adicionarCasa(casa);
-        }
-
-        tabuleiro.imprimirLayout();  // Imprime o layout do tabuleiro
     }
 
     public void config() {
@@ -62,6 +43,42 @@ public class Jogo {
         int modoDebugEscolha = JOptionPane.showConfirmDialog(null, "Ativar modo debug?", "Modo Debug", JOptionPane.YES_NO_OPTION);
         boolean modoDebug = (modoDebugEscolha == JOptionPane.YES_OPTION);
         controller.setModoDebug(modoDebug);
+    }
+
+    public void configTabuleiro(int numCasas) {
+        Map<String, Set<Integer>> casasEspeciais = new HashMap<>();
+        String[] tiposCasas = {"Surpresa", "Prisão", "Sorte", "Azar", "Reversa", "Joga de Novo", "Troca"};
+
+        for (String tipo : tiposCasas) {
+            String input = JOptionPane.showInputDialog(null,
+                    "Digite os números das casas " + tipo + " (separados por vírgula):",
+                    "Configuração de Casas " + tipo,
+                    JOptionPane.QUESTION_MESSAGE);
+
+            Set<Integer> casas = new HashSet<>();
+            if (input != null && !input.trim().isEmpty()) {
+                for (String num : input.split(",")) {
+                    casas.add(Integer.parseInt(num.trim()));
+                }
+            }
+            casasEspeciais.put(tipo, casas);
+        }
+
+        for (int i = 0; i < numCasas; i++) {
+            Casa casa = criarCasa(i, casasEspeciais);
+            tabuleiro.adicionarCasa(casa);
+        }
+
+        tabuleiro.imprimirLayout();
+    }
+
+    private Casa criarCasa(int numero, Map<String, Set<Integer>> casasEspeciais) {
+        for (Map.Entry<String, Set<Integer>> entry : casasEspeciais.entrySet()) {
+            if (entry.getValue().contains(numero)) {
+                return CasaFactory.criarCasaEspecifica(entry.getKey(), numero);
+            }
+        }
+        return new CasaSimples(numero);
     }
 
     public void printTabuleiro() {
