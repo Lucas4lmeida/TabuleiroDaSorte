@@ -4,9 +4,12 @@ package decorators;
 import models.Jogador;
 import models.ResultadoDados;
 
+import javax.swing.*;
+
 public class JogadorComMoleton extends JogadorDecorator {
     public JogadorComMoleton(Jogador jogador) {
         super(jogador);
+        this.icon = new ImageIcon("src/resources/icons/moleton_icon.png");
         if (!(jogador instanceof JogadorComBone)) {
             throw new IllegalArgumentException("O jogador precisa ter um boné antes de usar o moleton.");
         }
@@ -22,6 +25,10 @@ public class JogadorComMoleton extends JogadorDecorator {
         }
     }
 
+    @Override
+    public String getInfoBonus() {
+        return "Moleton: +3 moedas em casas simples";
+    }
     @Override
     public String toString() {
         return super.toString() + " (com Moleton)";

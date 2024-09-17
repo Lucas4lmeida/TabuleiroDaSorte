@@ -2,6 +2,7 @@ package controllers;
 
 import models.*;
 import views.TabuleiroView;
+import utils.InputValidator;
 import javax.swing.JOptionPane;
 
 public class TabuleiroController {
@@ -69,28 +70,24 @@ public class TabuleiroController {
 
         JOptionPane.showMessageDialog(null, jogador.getNome() + " andou " + casasAndadas + " casas.", "Movimento", JOptionPane.INFORMATION_MESSAGE);
 
-        int novaPosicao = jogador.getPosicao() + casasAndadas;
-        if (novaPosicao >= tabuleiro.getCasas().size()) {
-            novaPosicao = tabuleiro.getCasas().size() - 1; // Garante que o jogador pare na última casa
-        }
+        int novaPosicao = (jogador.getPosicao() + casasAndadas) % tabuleiro.getCasas().size();
         jogador.setPosicao(novaPosicao);
 
         Casa casaAtual = tabuleiro.getCasas().get(novaPosicao);
         casaAtual.aplicarRegra(jogador, tabuleiro);
 
-        if (jogoTerminou()) {
-            anunciarVencedor(jogador);
+        if (casaAtual instanceof CasaJogaDeNovo) {
+            JOptionPane.showMessageDialog(null, jogador.getNome() + " joga novamente!", "Jogar Novamente", JOptionPane.INFORMATION_MESSAGE);
+            realizarJogada(jogador);
         }
     }
 
     private int lerCasasDebug() {
-        String input = JOptionPane.showInputDialog(null, "Modo Debug: Digite o número de casas para andar:", "Movimento Debug", JOptionPane.QUESTION_MESSAGE);
-        return Integer.parseInt(input);
+        return InputValidator.lerInteiro("Modo Debug: Digite o número de casas para andar:", "Movimento Debug", 0, tabuleiro.getCasas().size() - 1);
     }
 
     private boolean jogoTerminou() {
-        int ultimaCasa = tabuleiro.getCasas().size() - 1;
-        return tabuleiro.getJogadores().stream().anyMatch(j -> j.getPosicao() >= ultimaCasa);
+        return tabuleiro.getJogadores().stream().anyMatch(j -> j.getPosicao() >= tabuleiro.getCasas().size() - 1);
     }
 
     private void anunciarVencedor(Jogador vencedor) {
@@ -105,6 +102,7 @@ public class TabuleiroController {
                 .forEach(jogador -> {
                     resultado.append(String.format("%s - Posição: %d, Moedas: %d, Jogadas: %d\n",
                             jogador.getNome(), jogador.getPosicao(), jogador.getMoedas(), jogador.getNumeroJogadas()));
+                    resultado.append("Bônus: ").append(jogador.getInfoBonus()).append("\n\n");
                 });
         JOptionPane.showMessageDialog(null, resultado.toString(), "Resultado Final", JOptionPane.INFORMATION_MESSAGE);
     }

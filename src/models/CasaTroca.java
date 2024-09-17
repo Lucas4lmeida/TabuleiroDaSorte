@@ -20,11 +20,12 @@ public class CasaTroca extends Casa {
                 JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
                 null, opcoes, opcoes[0]);
 
+        Jogador novoJogador = jogador;
         switch (escolha) {
             case 0: // Boné
                 if (jogador.getMoedas() >= 2) {
                     jogador.removerMoedas(2);
-                    jogador = new JogadorComBone(jogador);
+                    novoJogador = new JogadorComBone(jogador);
                     JOptionPane.showMessageDialog(null, jogador.getNome() + " adquiriu um boné!", "Item Adquirido", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(null, "Moedas insuficientes para comprar o boné.", "Compra Falhou", JOptionPane.WARNING_MESSAGE);
@@ -33,7 +34,7 @@ public class CasaTroca extends Casa {
             case 1: // Moleton
                 if (jogador instanceof JogadorComBone && jogador.getMoedas() >= 3) {
                     jogador.removerMoedas(3);
-                    jogador = new JogadorComMoleton(jogador);
+                    novoJogador = new JogadorComMoleton(jogador);
                     JOptionPane.showMessageDialog(null, jogador.getNome() + " adquiriu um moleton!", "Item Adquirido", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(null, "Você precisa ter um boné e 3 moedas para comprar o moleton.", "Compra Falhou", JOptionPane.WARNING_MESSAGE);
@@ -42,7 +43,7 @@ public class CasaTroca extends Casa {
             case 2: // Óculos escuros
                 if (jogador instanceof JogadorComMoleton && jogador.getMoedas() >= 4) {
                     jogador.removerMoedas(4);
-                    jogador = new JogadorComOculos(jogador);
+                    novoJogador = new JogadorComOculos(jogador);
                     JOptionPane.showMessageDialog(null, jogador.getNome() + " adquiriu óculos escuros!", "Item Adquirido", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(null, "Você precisa ter um moleton e 4 moedas para comprar os óculos escuros.", "Compra Falhou", JOptionPane.WARNING_MESSAGE);
@@ -55,8 +56,14 @@ public class CasaTroca extends Casa {
                 JOptionPane.showMessageDialog(null, "Opção inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
-        // Atualiza o jogador no tabuleiro
-        int index = tabuleiro.getJogadores().indexOf(jogador);
-        tabuleiro.getJogadores().set(index, jogador);
+        // Atualiza o jogador no tabuleiro apenas se ele foi modificado
+        if (novoJogador != jogador) {
+            for (int i = 0; i < tabuleiro.getJogadores().size(); i++) {
+                if (tabuleiro.getJogadores().get(i) == jogador) {
+                    tabuleiro.getJogadores().set(i, novoJogador);
+                    break;
+                }
+            }
+        }
     }
 }

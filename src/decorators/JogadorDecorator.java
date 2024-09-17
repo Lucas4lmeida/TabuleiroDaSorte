@@ -4,12 +4,20 @@ package decorators;
 import models.Jogador;
 import models.ResultadoDados;
 
+import javax.swing.ImageIcon;
+
 public abstract class JogadorDecorator extends Jogador {
     protected Jogador jogadorDecorado;
+    protected ImageIcon icon;
 
     public JogadorDecorator(Jogador jogador) {
         super(jogador.getNome(), jogador.getCor());
         this.jogadorDecorado = jogador;
+    }
+
+    @Override
+    public ImageIcon getIcon() {
+        return icon;
     }
 
     @Override
@@ -26,6 +34,8 @@ public abstract class JogadorDecorator extends Jogador {
     public void adicionarMoedas(int quantidade) {
         jogadorDecorado.adicionarMoedas(quantidade);
     }
+
+    public abstract String getInfoBonus();
 
     @Override
     public void removerMoedas(int quantidade) {

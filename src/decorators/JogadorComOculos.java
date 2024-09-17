@@ -4,9 +4,12 @@ package decorators;
 import models.Jogador;
 import models.ResultadoDados;
 
+import javax.swing.*;
+
 public class JogadorComOculos extends JogadorDecorator {
     public JogadorComOculos(Jogador jogador) {
         super(jogador);
+        this.icon = new ImageIcon("src/resources/icons/oculos_icon.png");
         if (!(jogador instanceof JogadorComMoleton)) {
             throw new IllegalArgumentException("O jogador precisa ter um moleton antes de usar os óculos.");
         }
@@ -21,7 +24,10 @@ public class JogadorComOculos extends JogadorDecorator {
             super.adicionarMoedas(quantidade);
         }
     }
-
+    @Override
+    public String getInfoBonus() {
+        return "Óculos: +6 moedas em casas simples";
+    }
     @Override
     public String toString() {
         return super.toString() + " (com Óculos Escuros)";

@@ -1,6 +1,7 @@
 package models;
 
 import java.awt.Color;
+import javax.swing.ImageIcon;
 
 public abstract class Jogador {
     protected String nome;
@@ -19,6 +20,14 @@ public abstract class Jogador {
         this.preso = false;
         this.turnosPreso = 0;
         this.numeroJogadas = 0;
+    }
+
+    public ImageIcon getIcon() {
+        return null; // Jogadores normais não têm ícone
+    }
+
+    public String getInfoBonus() {
+        return "Sem bônus"; // Jogadores normais não têm bônus
     }
 
     // Método abstrato para jogar dados
