@@ -1,74 +1,48 @@
+// TabuleiroView.java
 package views;
 
+import models.*;
 import javax.swing.*;
-import models.Jogador;
 import java.awt.*;
-import java.util.List;
 
-public class TabuleiroView {
-    private JFrame frame;
+public class TabuleiroView extends JFrame {
     private PainelTabuleiro painelTabuleiro;
-    private List<Jogador> jogadores;
-    private int jogadorAtualIndex = 0;
+    private JTextArea infoArea;
 
-    public TabuleiroView(List<Jogador> jogadores) {
-        this.jogadores = jogadores;
-        frame = new JFrame("Tabuleiro do Jogo");
-        painelTabuleiro = new PainelTabuleiro(jogadores);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.add(painelTabuleiro, BorderLayout.CENTER);
-        frame.pack();
-        frame.setVisible(true);
+    public TabuleiroView() {
+        setTitle("Jogo de Tabuleiro");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        painelTabuleiro = new PainelTabuleiro();
+        add(painelTabuleiro, BorderLayout.CENTER);
+
+        infoArea = new JTextArea(5, 30);
+        infoArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(infoArea);
+        add(scrollPane, BorderLayout.SOUTH);
+
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
-    public JFrame getFrame() {
-        return frame;
+    public void atualizarTabuleiro(Tabuleiro tabuleiro) {
+        painelTabuleiro.atualizarTabuleiro(tabuleiro);
+        atualizarInfoJogadores(tabuleiro);
+        repaint();
     }
 
-    public void atualizar() {
-        painelTabuleiro.repaint();
-    }
-
-    public void pularVez() {
-        // Avança o índice do jogador atual e atualiza a visão
-        jogadorAtualIndex = (jogadorAtualIndex + 1) % jogadores.size();
-        atualizar();
-    }
-
-    public void retrocederJogador() {
-        Jogador jogadorAtual = jogadores.get(jogadorAtualIndex);
-        int novaPosicao = jogadorAtual.getPosicao() - 1; // Retrocede uma casa
-        if (novaPosicao < 0) novaPosicao = 0; // Garante que a posição não seja negativa
-        jogadorAtual.setPosicao(novaPosicao);
-        atualizar();
-    }
-
-    public void alterarTipoJogador(Jogador jogador, Jogador novoTipo) {
-        int index = jogadores.indexOf(jogador);
-        if (index >= 0) {
-            jogadores.set(index, novoTipo);
-            painelTabuleiro = new PainelTabuleiro(jogadores); // Atualiza o painel com a nova lista
-            frame.setContentPane(painelTabuleiro);
-            atualizar();
+    private void atualizarInfoJogadores(Tabuleiro tabuleiro) {
+        StringBuilder info = new StringBuilder("Informações dos Jogadores:\n");
+        for (Jogador jogador : tabuleiro.getJogadores()) {
+            info.append(String.format("%s: Posição %d, Moedas %d\n",
+                    jogador.getNome(), jogador.getPosicao(), jogador.getMoedas()));
         }
+        infoArea.setText(info.toString());
     }
 
-    public void trocarPosicaoJogadores(Jogador jogador) {
-        Jogador jogadorMaisAtras = null;
-        for (Jogador j : jogadores) {
-            if (j != jogador && (jogadorMaisAtras == null || j.getPosicao() < jogadorMaisAtras.getPosicao())) {
-                jogadorMaisAtras = j;
-            }
-        }
-
-        if (jogadorMaisAtras != null && jogadorMaisAtras.getPosicao() < jogador.getPosicao()) {
-            int posicaoOriginal = jogador.getPosicao();
-            jogador.setPosicao(jogadorMaisAtras.getPosicao());
-            jogadorMaisAtras.setPosicao(posicaoOriginal);
-            atualizar();
-        } else {
-            JOptionPane.showMessageDialog(frame, "Não há jogadores atrás para trocar de lugar.");
-        }
+    public void mostrarMensagem(String mensagem) {
+        JOptionPane.showMessageDialog(this, mensagem);
     }
 }

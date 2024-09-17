@@ -1,10 +1,12 @@
+// CartaAleatoria.java
 package models;
 
 import java.util.Random;
 
 public class CartaAleatoria {
-    public enum Tipo { CARTA_AZARADO, CARTA_AFORTUNADO }
+    public enum Tipo { CARTA_AZARADO, CARTA_SORTUDO }
     private Tipo tipo;
+    private static Random random = new Random();
 
     private CartaAleatoria(Tipo tipo) {
         this.tipo = tipo;
@@ -15,12 +17,19 @@ public class CartaAleatoria {
     }
 
     public static CartaAleatoria sortearCarta() {
-        Random rand = new Random();
-        return new CartaAleatoria(rand.nextBoolean() ? Tipo.CARTA_AZARADO : Tipo.CARTA_AFORTUNADO);
+        Tipo tipoSorteado = random.nextBoolean() ? Tipo.CARTA_AZARADO : Tipo.CARTA_SORTUDO;
+        return new CartaAleatoria(tipoSorteado);
     }
 
     @Override
     public String toString() {
-        return tipo == Tipo.CARTA_AZARADO ? "Que azar! Você é um jogador azarado!" : "Parabéns! Você é um jogador sortudo!";
+        switch (tipo) {
+            case CARTA_AZARADO:
+                return "Que azar! Você se tornou um jogador azarado!";
+            case CARTA_SORTUDO:
+                return "Que sorte! Você se tornou um jogador sortudo!";
+            default:
+                return "Carta desconhecida";
+        }
     }
 }
