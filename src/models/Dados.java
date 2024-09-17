@@ -9,9 +9,9 @@ public class Dados {
         this.random = new Random();
     }
 
-    public int[] lancarDados() {
+    public ResultadoDados lancarDados() {
         int dado1 = random.nextInt(6) + 1;
         int dado2 = random.nextInt(6) + 1;
-        return new int[]{dado1, dado2, dado1 + dado2};
+        return new ResultadoDados(dado1, dado2);
     }
 }

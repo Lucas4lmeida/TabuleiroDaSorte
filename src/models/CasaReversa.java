@@ -1,6 +1,8 @@
 // CasaReversa.java
 package models;
 
+import javax.swing.JOptionPane;
+
 public class CasaReversa extends Casa {
     public CasaReversa(int numero) {
         super(numero);
@@ -13,9 +15,15 @@ public class CasaReversa extends Casa {
             int posicaoTemp = jogador.getPosicao();
             jogador.setPosicao(jogadorMaisAtras.getPosicao());
             jogadorMaisAtras.setPosicao(posicaoTemp);
-            System.out.println(jogador.getNome() + " trocou de lugar com " + jogadorMaisAtras.getNome() + "!");
+            JOptionPane.showMessageDialog(null,
+                    jogador.getNome() + " trocou de lugar com " + jogadorMaisAtras.getNome() + "!",
+                    "Casa Reversa",
+                    JOptionPane.INFORMATION_MESSAGE);
         } else {
-            System.out.println(jogador.getNome() + " é o último e não trocou de lugar.");
+            JOptionPane.showMessageDialog(null,
+                    jogador.getNome() + " é o último e não trocou de lugar.",
+                    "Casa Reversa",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }

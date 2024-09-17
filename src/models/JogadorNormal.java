@@ -9,7 +9,8 @@ public class JogadorNormal extends Jogador {
     }
 
     @Override
-    public int[] jogarDados() {
-        return new Dados().lancarDados();
+    public ResultadoDados jogarDados() {
+        Dados dados = new Dados();
+        return dados.lancarDados();
     }
 }

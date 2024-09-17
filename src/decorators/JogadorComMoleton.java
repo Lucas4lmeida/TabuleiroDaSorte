@@ -2,6 +2,7 @@
 package decorators;
 
 import models.Jogador;
+import models.ResultadoDados;
 
 public class JogadorComMoleton extends JogadorDecorator {
     public JogadorComMoleton(Jogador jogador) {
@@ -26,7 +27,7 @@ public class JogadorComMoleton extends JogadorDecorator {
         return super.toString() + " (com Moleton)";
     }
     @Override
-    public int[] jogarDados() {
+    public ResultadoDados jogarDados() {
         return jogadorDecorado.jogarDados();
     }
 }

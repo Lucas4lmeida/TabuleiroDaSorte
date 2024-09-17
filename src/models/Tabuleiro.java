@@ -46,4 +46,11 @@ public class Tabuleiro {
                 ))
                 .orElse(null);
     }
+    public void imprimirLayout() {
+        StringBuilder layout = new StringBuilder("Layout do Tabuleiro:\n");
+        for (int i = 0; i < casas.size(); i++) {
+            layout.append(String.format("Casa %d: %s\n", i, casas.get(i).getClass().getSimpleName()));
+        }
+        System.out.println(layout.toString());
+    }
 }

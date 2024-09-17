@@ -1,6 +1,8 @@
 // CasaJogaDeNovo.java
 package models;
 
+import javax.swing.JOptionPane;
+
 public class CasaJogaDeNovo extends Casa {
     public CasaJogaDeNovo(int numero) {
         super(numero);
@@ -8,7 +10,9 @@ public class CasaJogaDeNovo extends Casa {
 
     @Override
     public void aplicarRegra(Jogador jogador, Tabuleiro tabuleiro) {
-        System.out.println(jogador.getNome() + " joga novamente!");
-        // A lógica para jogar novamente é implementada na classe Jogo
+        JOptionPane.showMessageDialog(null,
+                jogador.getNome() + " joga novamente!",
+                "Casa Joga De Novo",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 }

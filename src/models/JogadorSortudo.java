@@ -9,11 +9,12 @@ public class JogadorSortudo extends Jogador {
     }
 
     @Override
-    public int[] jogarDados() {
-        int[] resultado;
+    public ResultadoDados jogarDados() {
+        Dados dados = new Dados();
+        ResultadoDados resultado;
         do {
-            resultado = new Dados().lancarDados();
-        } while (resultado[2] < 7);
+            resultado = dados.lancarDados();
+        } while (resultado.getTotal() < 7);
         return resultado;
     }
 }

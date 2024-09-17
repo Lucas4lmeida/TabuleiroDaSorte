@@ -1,4 +1,3 @@
-// Jogador.java
 package models;
 
 import java.awt.Color;
@@ -6,19 +5,40 @@ import java.awt.Color;
 public abstract class Jogador {
     protected String nome;
     protected Color cor;
-    protected int posicao = 0;
-    protected int moedas = 0;
-    protected boolean preso = false;
-    protected int turnosPreso = 0;
-    protected int numeroJogadas = 0;
+    protected int posicao;
+    protected int moedas;
+    protected boolean preso;
+    protected int turnosPreso;
+    protected int numeroJogadas;
 
     public Jogador(String nome, Color cor) {
         this.nome = nome;
         this.cor = cor;
+        this.posicao = 0;
+        this.moedas = 0;
+        this.preso = false;
+        this.turnosPreso = 0;
+        this.numeroJogadas = 0;
     }
 
-    public abstract int[] jogarDados();
+    // Método abstrato para jogar dados
+    public abstract ResultadoDados jogarDados();
 
+    // Getters e setters
+    public String getNome() { return nome; }
+    public Color getCor() { return cor; }
+    public int getPosicao() { return posicao; }
+    public void setPosicao(int posicao) { this.posicao = posicao; }
+    public int getMoedas() { return moedas; }
+    public void setMoedas(int moedas) { this.moedas = moedas; }
+    public boolean estaPreso() { return preso; }
+    public void setPreso(boolean preso) { this.preso = preso; }
+    public int getTurnosPreso() { return turnosPreso; }
+    public void setTurnosPreso(int turnosPreso) { this.turnosPreso = turnosPreso; }
+    public int getNumeroJogadas() { return numeroJogadas; }
+    public void setNumeroJogadas(int numeroJogadas) { this.numeroJogadas = numeroJogadas; }
+
+    // Outros métodos
     public void mover(int casas) {
         this.posicao += casas;
         this.numeroJogadas++;
@@ -31,18 +51,6 @@ public abstract class Jogador {
     public void removerMoedas(int quantidade) {
         this.moedas = Math.max(0, this.moedas - quantidade);
     }
-
-    // Getters e setters
-    public String getNome() { return nome; }
-    public Color getCor() { return cor; }
-    public int getPosicao() { return posicao; }
-    public void setPosicao(int posicao) { this.posicao = posicao; }
-    public int getMoedas() { return moedas; }
-    public boolean estaPreso() { return preso; }
-    public void setPreso(boolean preso) { this.preso = preso; }
-    public int getTurnosPreso() { return turnosPreso; }
-    public void setTurnosPreso(int turnosPreso) { this.turnosPreso = turnosPreso; }
-    public int getNumeroJogadas() { return numeroJogadas; }
 
     public void decrementarTurnosPreso() {
         if (turnosPreso > 0) {

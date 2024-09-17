@@ -1,26 +1,52 @@
-// CasaSurpresa.java
 package models;
 
 import factories.JogadorFactory;
-import java.util.Random;
+import javax.swing.JOptionPane;
 
 public class CasaSurpresa extends Casa {
-    private Random random = new Random();
-
     public CasaSurpresa(int numero) {
         super(numero);
     }
 
     @Override
     public void aplicarRegra(Jogador jogador, Tabuleiro tabuleiro) {
-        System.out.println(jogador.getNome() + " caiu na casa surpresa!");
-        String[] tipos = {"normal", "sortudo", "azarado"};
-        String novoTipo = tipos[random.nextInt(tipos.length)];
-        Jogador novoJogador = JogadorFactory.criarJogador(novoTipo, jogador.getNome());
+        JOptionPane.showMessageDialog(null,
+                jogador.getNome() + " caiu na casa surpresa!",
+                "Casa Surpresa",
+                JOptionPane.INFORMATION_MESSAGE);
+
+        CartaAleatoria carta = CartaAleatoria.sortearCarta();
+        JOptionPane.showMessageDialog(null,
+                jogador.getNome() + " tirou uma carta: " + carta,
+                "Carta Aleatória",
+                JOptionPane.INFORMATION_MESSAGE);
+
+        String novoTipo;
+        switch (carta.getTipo()) {
+            case CARTA_NORMAL:
+                novoTipo = "normal";
+                break;
+            case CARTA_SORTUDO:
+                novoTipo = "sortudo";
+                break;
+            case CARTA_AZARADO:
+                novoTipo = "azarado";
+                break;
+            default:
+                throw new IllegalStateException("Tipo de carta desconhecido");
+        }
+
+        Jogador novoJogador = JogadorFactory.criarJogador(novoTipo, jogador.getNome(), jogador.getCor());
         novoJogador.setPosicao(jogador.getPosicao());
-        novoJogador.adicionarMoedas(jogador.getMoedas());
+        novoJogador.setMoedas(jogador.getMoedas());
+        novoJogador.setNumeroJogadas(jogador.getNumeroJogadas());
+
         int index = tabuleiro.getJogadores().indexOf(jogador);
         tabuleiro.getJogadores().set(index, novoJogador);
-        System.out.println(jogador.getNome() + " agora é um jogador " + novoTipo + "!");
+
+        JOptionPane.showMessageDialog(null,
+                jogador.getNome() + " agora é um jogador " + novoTipo + "!",
+                "Mudança de Tipo",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 }

@@ -1,6 +1,8 @@
 // CasaAzar.java
 package models;
 
+import javax.swing.JOptionPane;
+
 public class CasaAzar extends Casa {
     public CasaAzar(int numero) {
         super(numero);
@@ -10,9 +12,15 @@ public class CasaAzar extends Casa {
     public void aplicarRegra(Jogador jogador, Tabuleiro tabuleiro) {
         if (!(jogador instanceof JogadorSortudo)) {
             jogador.removerMoedas(3);
-            System.out.println(jogador.getNome() + " perdeu 3 moedas na casa de azar!");
+            JOptionPane.showMessageDialog(null,
+                    jogador.getNome() + " perdeu 3 moedas na casa de azar!",
+                    "Casa Azar",
+                    JOptionPane.WARNING_MESSAGE);
         } else {
-            System.out.println(jogador.getNome() + " é sortudo e não perdeu moedas na casa de azar.");
+            JOptionPane.showMessageDialog(null,
+                    jogador.getNome() + " é sortudo e não perdeu moedas na casa de azar.",
+                    "Casa Azar",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }

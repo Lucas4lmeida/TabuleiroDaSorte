@@ -2,7 +2,7 @@
 package decorators;
 
 import models.Jogador;
-import java.awt.Color;
+import models.ResultadoDados;
 
 public abstract class JogadorDecorator extends Jogador {
     protected Jogador jogadorDecorado;
@@ -13,7 +13,7 @@ public abstract class JogadorDecorator extends Jogador {
     }
 
     @Override
-    public int[] jogarDados() {
+    public ResultadoDados jogarDados() {
         return jogadorDecorado.jogarDados();
     }
 

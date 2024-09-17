@@ -2,6 +2,7 @@
 package decorators;
 
 import models.Jogador;
+import models.ResultadoDados;
 
 public class JogadorComOculos extends JogadorDecorator {
     public JogadorComOculos(Jogador jogador) {
@@ -27,7 +28,7 @@ public class JogadorComOculos extends JogadorDecorator {
     }
 
     @Override
-    public int[] jogarDados() {
+    public ResultadoDados jogarDados() {
         return jogadorDecorado.jogarDados();
     }
 }

@@ -1,20 +1,17 @@
 package controllers;
 
 import models.*;
-import views.*;
+import views.TabuleiroView;
 import javax.swing.JOptionPane;
-import java.util.*;
 
 public class TabuleiroController {
     private Tabuleiro tabuleiro;
     private TabuleiroView view;
-    private Scanner scanner;
     private boolean modoDebug;
 
     public TabuleiroController(Tabuleiro tabuleiro, TabuleiroView view) {
         this.tabuleiro = tabuleiro;
         this.view = view;
-        this.scanner = new Scanner(System.in);
         this.modoDebug = false;
     }
 
@@ -62,30 +59,27 @@ public class TabuleiroController {
         if (modoDebug) {
             casasAndadas = lerCasasDebug();
         } else {
-            int[] resultadoDados = jogador.jogarDados();
-            casasAndadas = resultadoDados[2]; // soma dos dados
+            ResultadoDados resultadoDados = jogador.jogarDados();
+            casasAndadas = resultadoDados.getTotal();
             JOptionPane.showMessageDialog(null,
-                    jogador.getNome() + " lançou os dados:\n" +
-                            "Dado 1: " + resultadoDados[0] + "\n" +
-                            "Dado 2: " + resultadoDados[1] + "\n" +
-                            "Total: " + casasAndadas,
+                    jogador.getNome() + " lançou os dados:\n" + resultadoDados,
                     "Resultado dos Dados",
                     JOptionPane.INFORMATION_MESSAGE);
         }
 
         JOptionPane.showMessageDialog(null, jogador.getNome() + " andou " + casasAndadas + " casas.", "Movimento", JOptionPane.INFORMATION_MESSAGE);
 
-        int novaPosicao = (jogador.getPosicao() + casasAndadas) % tabuleiro.getCasas().size();
+        int novaPosicao = jogador.getPosicao() + casasAndadas;
+        if (novaPosicao >= tabuleiro.getCasas().size()) {
+            novaPosicao = tabuleiro.getCasas().size() - 1; // Garante que o jogador pare na última casa
+        }
         jogador.setPosicao(novaPosicao);
 
         Casa casaAtual = tabuleiro.getCasas().get(novaPosicao);
         casaAtual.aplicarRegra(jogador, tabuleiro);
 
-        view.atualizarTabuleiro(tabuleiro);
-
-        if (casaAtual instanceof CasaJogaDeNovo) {
-            JOptionPane.showMessageDialog(null, jogador.getNome() + " joga novamente!", "Jogar Novamente", JOptionPane.INFORMATION_MESSAGE);
-            realizarJogada(jogador);
+        if (jogoTerminou()) {
+            anunciarVencedor(jogador);
         }
     }
 
@@ -95,7 +89,8 @@ public class TabuleiroController {
     }
 
     private boolean jogoTerminou() {
-        return tabuleiro.getJogadores().stream().anyMatch(j -> j.getPosicao() >= tabuleiro.getCasas().size() - 1);
+        int ultimaCasa = tabuleiro.getCasas().size() - 1;
+        return tabuleiro.getJogadores().stream().anyMatch(j -> j.getPosicao() >= ultimaCasa);
     }
 
     private void anunciarVencedor(Jogador vencedor) {
@@ -104,19 +99,13 @@ public class TabuleiroController {
     }
 
     private void mostrarResultadoFinal() {
-        List<Jogador> jogadores = tabuleiro.getJogadores();
-        jogadores.sort((j1, j2) -> Integer.compare(j2.getPosicao(), j1.getPosicao()));
-
         StringBuilder resultado = new StringBuilder("Resultado Final:\n\n");
-
-        for (int i = 0; i < jogadores.size(); i++) {
-            Jogador jogador = jogadores.get(i);
-            resultado.append(String.format("%dº lugar: %s\n", i + 1, jogador.getNome()))
-                    .append(String.format("Posição: %d\n", jogador.getPosicao()))
-                    .append(String.format("Moedas: %d\n", jogador.getMoedas()))
-                    .append(String.format("Jogadas: %d\n\n", jogador.getNumeroJogadas()));
-        }
-
+        tabuleiro.getJogadores().stream()
+                .sorted((j1, j2) -> Integer.compare(j2.getPosicao(), j1.getPosicao()))
+                .forEach(jogador -> {
+                    resultado.append(String.format("%s - Posição: %d, Moedas: %d, Jogadas: %d\n",
+                            jogador.getNome(), jogador.getPosicao(), jogador.getMoedas(), jogador.getNumeroJogadas()));
+                });
         JOptionPane.showMessageDialog(null, resultado.toString(), "Resultado Final", JOptionPane.INFORMATION_MESSAGE);
     }
 }
