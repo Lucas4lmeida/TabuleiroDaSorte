@@ -22,16 +22,41 @@ public abstract class Jogador {
         this.numeroJogadas = 0;
     }
 
-    public ImageIcon getIcon() {
-        return null; // Jogadores normais não têm ícone
-    }
-
-    public String getInfoBonus() {
-        return "Sem bônus"; // Jogadores normais não têm bônus
-    }
-
-    // Método abstrato para jogar dados
     public abstract ResultadoDados jogarDados();
+
+    public void mover(int casas, int totalCasas) {
+        this.posicao = Math.min(this.posicao + casas, totalCasas - 1);
+        this.numeroJogadas++;
+    }
+
+    public void adicionarMoedas(int quantidade) {
+        this.moedas += quantidade;
+    }
+
+    public void removerMoedas(int quantidade) {
+        this.moedas = Math.max(0, this.moedas - quantidade);
+    }
+
+    public boolean chegouAoFinal(int totalCasas) {
+        return this.posicao >= totalCasas - 1;
+    }
+
+    public void decrementarTurnosPreso() {
+        if (turnosPreso > 0) {
+            turnosPreso--;
+            if (turnosPreso == 0) {
+                preso = false;
+            }
+        }
+    }
+
+    public ImageIcon getIcon() {
+        return null; // Método base, será sobrescrito nos decoradores
+    }
+
+    public String getInfoItens() {
+        return "Nenhum"; // Método base, será sobrescrito nos decoradores
+    }
 
     // Getters e setters
     public String getNome() { return nome; }
@@ -45,28 +70,21 @@ public abstract class Jogador {
     public int getTurnosPreso() { return turnosPreso; }
     public void setTurnosPreso(int turnosPreso) { this.turnosPreso = turnosPreso; }
     public int getNumeroJogadas() { return numeroJogadas; }
-    public void setNumeroJogadas(int numeroJogadas) { this.numeroJogadas = numeroJogadas; }
 
-    // Outros métodos
-    public void mover(int casas) {
-        this.posicao += casas;
-        this.numeroJogadas++;
+    @Override
+    public String toString() {
+        return "Jogador{" +
+                "nome='" + nome + '\'' +
+                ", cor=" + cor +
+                ", posicao=" + posicao +
+                ", moedas=" + moedas +
+                ", preso=" + preso +
+                ", turnosPreso=" + turnosPreso +
+                ", numeroJogadas=" + numeroJogadas +
+                '}';
     }
 
-    public void adicionarMoedas(int quantidade) {
-        this.moedas += quantidade;
-    }
-
-    public void removerMoedas(int quantidade) {
-        this.moedas = Math.max(0, this.moedas - quantidade);
-    }
-
-    public void decrementarTurnosPreso() {
-        if (turnosPreso > 0) {
-            turnosPreso--;
-            if (turnosPreso == 0) {
-                preso = false;
-            }
-        }
+    public void setNumeroJogadas(int numeroJogadas) {
+        this.numeroJogadas = numeroJogadas;
     }
 }

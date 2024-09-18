@@ -1,4 +1,3 @@
-// CasaSorte.java
 package models;
 
 import javax.swing.JOptionPane;
@@ -11,7 +10,8 @@ public class CasaSorte extends Casa {
     @Override
     public void aplicarRegra(Jogador jogador, Tabuleiro tabuleiro) {
         if (!(jogador instanceof JogadorAzarado)) {
-            jogador.mover(3);
+            int totalCasas = tabuleiro.getCasas().size();
+            jogador.mover(3, totalCasas);
             JOptionPane.showMessageDialog(null,
                     jogador.getNome() + " avançou 3 casas na casa da sorte!",
                     "Casa Sorte",

@@ -68,15 +68,25 @@ public class TabuleiroController {
                     JOptionPane.INFORMATION_MESSAGE);
         }
 
-        JOptionPane.showMessageDialog(null, jogador.getNome() + " andou " + casasAndadas + " casas.", "Movimento", JOptionPane.INFORMATION_MESSAGE);
+        int novaPosicao = jogador.getPosicao() + casasAndadas;
+        int ultimaCasa = tabuleiro.getCasas().size() - 1;
 
-        int novaPosicao = (jogador.getPosicao() + casasAndadas) % tabuleiro.getCasas().size();
+        if (novaPosicao >= ultimaCasa) {
+            novaPosicao = ultimaCasa;
+            JOptionPane.showMessageDialog(null,
+                    jogador.getNome() + " chegou ao final do tabuleiro!",
+                    "Fim do Jogo",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, jogador.getNome() + " andou " + casasAndadas + " casas.", "Movimento", JOptionPane.INFORMATION_MESSAGE);
+        }
+
         jogador.setPosicao(novaPosicao);
 
         Casa casaAtual = tabuleiro.getCasas().get(novaPosicao);
         casaAtual.aplicarRegra(jogador, tabuleiro);
 
-        if (casaAtual instanceof CasaJogaDeNovo) {
+        if (casaAtual instanceof CasaJogaDeNovo && novaPosicao < ultimaCasa) {
             JOptionPane.showMessageDialog(null, jogador.getNome() + " joga novamente!", "Jogar Novamente", JOptionPane.INFORMATION_MESSAGE);
             realizarJogada(jogador);
         }
@@ -102,7 +112,7 @@ public class TabuleiroController {
                 .forEach(jogador -> {
                     resultado.append(String.format("%s - Posição: %d, Moedas: %d, Jogadas: %d\n",
                             jogador.getNome(), jogador.getPosicao(), jogador.getMoedas(), jogador.getNumeroJogadas()));
-                    resultado.append("Bônus: ").append(jogador.getInfoBonus()).append("\n\n");
+                    resultado.append("Itens: ").append(jogador.getInfoItens()).append("\n\n");
                 });
         JOptionPane.showMessageDialog(null, resultado.toString(), "Resultado Final", JOptionPane.INFORMATION_MESSAGE);
     }

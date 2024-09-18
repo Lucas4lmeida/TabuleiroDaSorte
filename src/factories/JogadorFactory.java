@@ -5,15 +5,20 @@ import java.awt.Color;
 
 public class JogadorFactory {
     public static Jogador criarJogador(String tipo, String nome, Color cor) {
+        Jogador jogador;
         switch (tipo.toLowerCase()) {
             case "normal":
-                return new JogadorNormal(nome, cor);
+                jogador = new JogadorNormal(nome, cor);
+                break;
             case "sortudo":
-                return new JogadorSortudo(nome, cor);
+                jogador = new JogadorSortudo(nome, cor);
+                break;
             case "azarado":
-                return new JogadorAzarado(nome, cor);
+                jogador = new JogadorAzarado(nome, cor);
+                break;
             default:
                 throw new IllegalArgumentException("Tipo de jogador inválido: " + tipo);
         }
+        return jogador;
     }
 }

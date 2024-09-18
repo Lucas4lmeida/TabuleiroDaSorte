@@ -40,6 +40,8 @@ public class CasaSurpresa extends Casa {
         novoJogador.setPosicao(jogador.getPosicao());
         novoJogador.setMoedas(jogador.getMoedas());
         novoJogador.setNumeroJogadas(jogador.getNumeroJogadas());
+        novoJogador.setPreso(jogador.estaPreso());
+        novoJogador.setTurnosPreso(jogador.getTurnosPreso());
 
         int index = tabuleiro.getJogadores().indexOf(jogador);
         tabuleiro.getJogadores().set(index, novoJogador);

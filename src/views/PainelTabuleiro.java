@@ -4,6 +4,8 @@ import models.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class PainelTabuleiro extends JPanel {
     private Tabuleiro tabuleiro;
@@ -11,9 +13,21 @@ public class PainelTabuleiro extends JPanel {
     private static final int MARGEM = 10;
     private static final int TAMANHO_JOGADOR = 30;
     private static final int TAMANHO_ICONE = 20;
+    private static final Map<Class<? extends Casa>, Color> CORES_CASAS = new LinkedHashMap<>();
+
+    static {
+        CORES_CASAS.put(CasaSimples.class, Color.WHITE);
+        CORES_CASAS.put(CasaSurpresa.class, Color.YELLOW);
+        CORES_CASAS.put(CasaPrisao.class, Color.RED);
+        CORES_CASAS.put(CasaSorte.class, Color.GREEN);
+        CORES_CASAS.put(CasaAzar.class, Color.ORANGE);
+        CORES_CASAS.put(CasaReversa.class, Color.CYAN);
+        CORES_CASAS.put(CasaJogaDeNovo.class, Color.MAGENTA);
+        CORES_CASAS.put(CasaTroca.class, Color.PINK);
+    }
 
     public PainelTabuleiro() {
-        setPreferredSize(new Dimension(800, 600));
+        setPreferredSize(new Dimension(1000, 700));
     }
 
     public void atualizarTabuleiro(Tabuleiro tabuleiro) {
@@ -31,11 +45,12 @@ public class PainelTabuleiro extends JPanel {
 
         desenharCasas(g, casas);
         desenharJogadores(g, jogadores, casas);
+        desenharLegenda(g);
     }
 
     private void desenharCasas(Graphics g, List<Casa> casas) {
         int casasPorLado = (int) Math.ceil(Math.sqrt(casas.size()));
-        int largura = getWidth() - 2 * MARGEM;
+        int largura = getWidth() - 300 - 2 * MARGEM;
         int altura = getHeight() - 2 * MARGEM;
 
         for (int i = 0; i < casas.size(); i++) {
@@ -52,13 +67,12 @@ public class PainelTabuleiro extends JPanel {
             g.drawRect(x, y, TAMANHO_CASA, TAMANHO_CASA);
             g.setFont(new Font("Arial", Font.PLAIN, 12));
             g.drawString(Integer.toString(i), x + 5, y + 15);
-            g.drawString(casa.getClass().getSimpleName(), x + 5, y + TAMANHO_CASA - 5);
         }
     }
 
     private void desenharJogadores(Graphics g, List<Jogador> jogadores, List<Casa> casas) {
         int casasPorLado = (int) Math.ceil(Math.sqrt(casas.size()));
-        int largura = getWidth() - 2 * MARGEM;
+        int largura = getWidth() - 300 - 2 * MARGEM;
         int altura = getHeight() - 2 * MARGEM;
 
         for (Jogador jogador : jogadores) {
@@ -84,20 +98,50 @@ public class PainelTabuleiro extends JPanel {
             ImageIcon icon = jogador.getIcon();
             if (icon != null) {
                 Image img = icon.getImage();
-                g.drawImage(img, x - TAMANHO_ICONE / 2, y - TAMANHO_JOGADOR - TAMANHO_ICONE / 2, TAMANHO_ICONE, TAMANHO_ICONE, this);
+                if (img != null) {
+                    g.drawImage(img, x - TAMANHO_ICONE / 2, y - TAMANHO_JOGADOR - TAMANHO_ICONE / 2, TAMANHO_ICONE, TAMANHO_ICONE, this);
+                } else {
+                    System.out.println("Imagem do ícone é null para " + jogador.getNome());
+                }
             }
         }
     }
 
     private Color getCasaColor(Casa casa) {
-        if (casa instanceof CasaSimples) return Color.WHITE;
-        if (casa instanceof CasaSurpresa) return Color.YELLOW;
-        if (casa instanceof CasaPrisao) return Color.RED;
-        if (casa instanceof CasaSorte) return Color.GREEN;
-        if (casa instanceof CasaAzar) return Color.ORANGE;
-        if (casa instanceof CasaReversa) return Color.CYAN;
-        if (casa instanceof CasaJogaDeNovo) return Color.MAGENTA;
-        if (casa instanceof CasaTroca) return Color.PINK;
-        return Color.LIGHT_GRAY;
+        return CORES_CASAS.getOrDefault(casa.getClass(), Color.LIGHT_GRAY);
+    }
+
+    private void desenharLegenda(Graphics g) {
+        int x = getWidth() - 280;
+        int y = MARGEM;
+        g.setFont(new Font("Arial", Font.BOLD, 16));
+        g.drawString("Legenda:", x, y);
+        y += 30;
+
+        g.setFont(new Font("Arial", Font.PLAIN, 14));
+        for (Map.Entry<Class<? extends Casa>, Color> entry : CORES_CASAS.entrySet()) {
+            g.setColor(entry.getValue());
+            g.fillRect(x, y, 20, 20);
+            g.setColor(Color.BLACK);
+            g.drawRect(x, y, 20, 20);
+            g.drawString(entry.getKey().getSimpleName().replace("Casa", ""), x + 30, y + 15);
+            y += 30;
+        }
+
+        // Adicionar informações dos jogadores
+        y += 20;
+        g.setFont(new Font("Arial", Font.BOLD, 16));
+        g.drawString("Jogadores:", x, y);
+        y += 30;
+
+        if (tabuleiro != null) {
+            for (Jogador jogador : tabuleiro.getJogadores()) {
+                g.setColor(jogador.getCor());
+                g.fillOval(x, y, 20, 20);
+                g.setColor(Color.BLACK);
+                g.drawString(jogador.getNome() + " - " + jogador.getMoedas() + " moedas", x + 30, y + 15);
+                y += 30;
+            }
+        }
     }
 }
